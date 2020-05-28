@@ -4,7 +4,6 @@ import re
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 
-
 # Making sure user has a valid URL in clipboard.
 
 while True:
@@ -37,10 +36,22 @@ try:
     # Break into lines and remove leading and trailing space on each.
     lines = (line.strip() for line in contents.splitlines())
     # Break multi-headlines into a line each
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    tertiary_text = list((phrase.strip() for line in lines for phrase in line.split("  ")))
 
     # List containing every character/word on the website.
-    print(list(chunks))
+    # print(list(secondary_final_list))
+
+    # Regex file to only hold characters between a-zA-Z
+    characters = re.compile('[^a-zA-Z]')
+    secondary_text = []
+    for item in tertiary_text:
+        if characters.findall(item):
+            secondary_text.append(item)
+        else:
+            continue
+
+    print(secondary_text)
+
 
 except HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")
@@ -49,7 +60,7 @@ except Exception as err:
 
 
 
-
+# https://en.wikipedia.org/wiki/Markov_chain
 
 
 

@@ -2,6 +2,7 @@ import requests
 import pyperclip
 import re
 import collections
+import random
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 
@@ -38,7 +39,8 @@ try:
     tertiary_text = list((phrase.strip() for line in lines for phrase in line.split("  ")))
 
     # Regex file to only hold characters between a-zA-Z
-    characters = re.compile('[^a-zA-Z]')
+    characters = re.compile('[a-zA-Z]')
+
 
     def punctuation_strip(lst):
         stripped_punctuation_list = []
@@ -49,7 +51,9 @@ try:
                 continue
         return stripped_punctuation_list
 
+
     secondary_text = punctuation_strip(tertiary_text)
+
 
     # Final list containing every single word from the provided URL.
     def convert(provided_list):
@@ -62,12 +66,25 @@ try:
         return primary_list
 
 
-    primary_text = convert(secondary_text)
+    primary_preliminary_list = convert(secondary_text)
+    primary_text = punctuation_strip(primary_preliminary_list)
+    print(primary_text)
 
     # Constructing probability matrix - Part 1.
     words = collections.Counter(primary_text)
     total_n_words = len(primary_text)
 
+    # Creating a function to check if first letter is uppercase in a randomly selected dictionary
+    def is_uppercase(word_dict):
+        while True:
+            if (a := random.choice(primary_text))[0].isupper():
+                break
+            else:
+                continue
+        return a
+
+    lead_word = is_uppercase(words)
+    print(lead_word)
 
 except HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")

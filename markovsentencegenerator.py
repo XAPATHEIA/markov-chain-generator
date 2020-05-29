@@ -12,10 +12,8 @@ while True:
     else:
         break
 
-
 # Grabbing user's URL from the
 base_url = pyperclip.paste()
-
 
 try:
     response = requests.get(base_url)
@@ -38,9 +36,6 @@ try:
     # Break multi-headlines into a line each
     tertiary_text = list((phrase.strip() for line in lines for phrase in line.split("  ")))
 
-    # List containing every character/word on the website.
-    # print(list(secondary_final_list))
-
     # Regex file to only hold characters between a-zA-Z
     characters = re.compile('[^a-zA-Z]')
     secondary_text = []
@@ -50,18 +45,24 @@ try:
         else:
             continue
 
-    print(secondary_text)
+    # Final list containing every single word from the provided URL. - Ready to Markov Generate.
+    def convert(provided_list):
+        primary_list = []
+        temporary_text = []
+        for sentence in provided_list:
+            temporary_list = sentence.split()
+            for word in temporary_list:
+                primary_list.append(word)
+        return primary_list
 
+
+    print(convert(secondary_text))
 
 except HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")
 except Exception as err:
     print(f"Other error occurred: {err}")
 
-
-
 # https://en.wikipedia.org/wiki/Markov_chain
 
-
-
-
+""""""

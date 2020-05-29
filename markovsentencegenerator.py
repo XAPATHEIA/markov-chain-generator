@@ -67,14 +67,13 @@ try:
 
     primary_preliminary_list = convert(secondary_text)
     primary_text = punctuation_strip(primary_preliminary_list)
-    print(primary_text)
 
-    # Constructing probability matrix - Part 1.
-    words = collections.Counter(primary_text)
+    # Constructing probabilities.
+    words_and_prob = (collections.Counter(primary_text)).most_common()
     total_n_words = len(primary_text)
     probabilities = []
-    for i in words.values():
-        probabilities.append(float("{:.4f}".format(i/total_n_words)))
+    for i in range(len(words_and_prob)):
+        probabilities.append(float("{:.10f}".format(words_and_prob[i][1]/total_n_words)))
     # Sorting probability list so it can map accurately to counter.
     probabilities.sort(reverse=True)
 
@@ -87,9 +86,21 @@ try:
                 continue
         return a
 
-    lead_word = is_uppercase(words)
-    print(len(probabilities))
+    # Creating the lead word.
+    lead_word = is_uppercase(words_and_prob)
+    words = []
+    for k in range(len(words_and_prob)):
+        words.append(words_and_prob[k][0])
 
+    # Generating sentence
+    list_of_generated_words = random.choices(
+        population=words,
+        weights=probabilities,
+        k=random.randint(10, 20)
+    )
+
+    generated_sentence = lead_word + ' ' + ' '.join(punctuation_strip(list_of_generated_words)) + "."
+    print(generated_sentence)
 
 
 except HTTPError as http_err:
@@ -97,4 +108,3 @@ except HTTPError as http_err:
 except Exception as err:
     print(f"Other error occurred: {err}")
 
-# https://en.wikipedia.org/wiki/Markov_chain

@@ -54,7 +54,6 @@ try:
 
     secondary_text = punctuation_strip(tertiary_text)
 
-
     # Final list containing every single word from the provided URL.
     def convert(provided_list):
         primary_list = []
@@ -73,6 +72,11 @@ try:
     # Constructing probability matrix - Part 1.
     words = collections.Counter(primary_text)
     total_n_words = len(primary_text)
+    probabilities = []
+    for i in words.values():
+        probabilities.append(float("{:.4f}".format(i/total_n_words)))
+    # Sorting probability list so it can map accurately to counter.
+    probabilities.sort(reverse=True)
 
     # Creating a function to check if first letter is uppercase in a randomly selected dictionary
     def is_uppercase(word_dict):
@@ -84,7 +88,9 @@ try:
         return a
 
     lead_word = is_uppercase(words)
-    print(lead_word)
+    print(len(probabilities))
+
+
 
 except HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")

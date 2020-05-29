@@ -77,7 +77,7 @@ try:
     # Creating a function to check if first letter is uppercase in a randomly selected dictionary
     def is_uppercase(word_dict):
         while True:
-            if (a := random.choice(primary_text))[0].isupper():
+            if (a := random.choice(primary_text))[0].isupper() and len(a) >= 4:
                 break
             else:
                 continue

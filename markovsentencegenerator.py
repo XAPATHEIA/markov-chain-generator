@@ -1,6 +1,7 @@
 import requests
 import pyperclip
 import re
+import collections
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 
@@ -38,14 +39,19 @@ try:
 
     # Regex file to only hold characters between a-zA-Z
     characters = re.compile('[^a-zA-Z]')
-    secondary_text = []
-    for item in tertiary_text:
-        if characters.findall(item):
-            secondary_text.append(item)
-        else:
-            continue
 
-    # Final list containing every single word from the provided URL. - Ready to Markov Generate.
+    def punctuation_strip(lst):
+        stripped_punctuation_list = []
+        for item in lst:
+            if characters.findall(item):
+                stripped_punctuation_list.append(item)
+            else:
+                continue
+        return stripped_punctuation_list
+
+    secondary_text = punctuation_strip(tertiary_text)
+
+    # Final list containing every single word from the provided URL.
     def convert(provided_list):
         primary_list = []
         temporary_text = []
@@ -56,7 +62,12 @@ try:
         return primary_list
 
 
-    print(convert(secondary_text))
+    primary_text = convert(secondary_text)
+
+    # Constructing probability matrix - Part 1.
+    words = collections.Counter(primary_text)
+    total_n_words = len(primary_text)
+
 
 except HTTPError as http_err:
     print(f"HTTP error occurred: {http_err}")
@@ -64,5 +75,3 @@ except Exception as err:
     print(f"Other error occurred: {err}")
 
 # https://en.wikipedia.org/wiki/Markov_chain
-
-""""""

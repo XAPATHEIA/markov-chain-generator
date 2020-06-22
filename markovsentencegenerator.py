@@ -77,7 +77,7 @@ try:
 
         generated_sentence = root_word.capitalize()
 
-        random_sentence_length = random.randint(5, 20)
+        random_sentence_length = random.randint(10, 15)
 
         for iteration in range(random_sentence_length):
             # Locating the index of the words that come AFTER the root word.
